@@ -30,6 +30,7 @@ The instruction is divided into three parts. The DQLab store management wants to
 2B. The promotions' effectiveness and efficiency, by figuring the burn rate of the promotions that were held, based on the sub-category.
 
 From the result of part 1 and 2, we will:
+
 3A. Analyze the total of customers each year
 3B. Analyze the total of new customers each year
 3C. Cohort to find out the number of retention customer in 2009
