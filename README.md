@@ -203,7 +203,7 @@ In this part, we will analyze the customers of DQLab Store.
 
 ```
 SELECT 
-  YEAR(order_date) as years, 
+  YEAR(order_date) AS years, 
   COUNT(DISTINCT customer) AS number_of_customer
 FROM 
   dqlab_sales_store
@@ -224,3 +224,57 @@ Output
 |  2012 |                594 |
 +-------+--------------------+
 ```
+
+We can see the number of customers each year are above 580 customers, with the highest total customers in 2012. There is no significant change in the total number of customers, but in 2012, the total number of customers increased by 13 customers.
+
+### Total of New Customers per Year
+
+```
+SELECT 
+	YEAR(first_transaction_date) AS years, 
+	COUNT(DISTINCT customer) AS number_of_new_customer
+FROM (SELECT 
+	  customer,
+	  MIN(order_date) AS first_transaction_date
+	  FROM dqlab_sales_store
+	  WHERE order_status="Order Finished"
+	  GROUP BY customer) AS first_transaction
+GROUP BY years
+```
+
+Output
+
+```
++-------+------------------------+
+| years | number_of_new_customer |
++-------+------------------------+
+|  2009 |                    585 |
+|  2010 |                    141 |
+|  2011 |                     38 |
+|  2012 |                     11 |
++-------+------------------------+
+```
+
+We can see the total of new customers is decreasing each year. 
+
+3C. The percentage of Retention Customer in 2009
+
+```
++-------+--------------------+
+| years | retention_customer |
++-------+--------------------+
+|  2009 |              77.26 |
++-------+--------------------+
+```
+
+We can the percentage of retention customers is 77.26%. It means 77.29% of customers in 2009 made transactions again in 2010.
+
+## Conclusion
+
+1. The highest sales were in 2009 with total sales are 4613872681 and total finished orders are 1244, while the lowest sales were in 2010 with total finished orders are 1248.
+2. The three sub-category product in 2011 with the highest sales were chairs & chairmats, office machines, and tables. However, in 2012, the three sub-category products with the highest sales were office machines, chairs & chairmats, and telephones & communication. We can conclude that in 2011 and 2012, the sales had different demands for products.
+3. The burn rate percentage and the cost of promotions tends to increase each year, shows the promotion is not effective and not efficient. The store needs to find another way to promote their products.
+4. The three products with the highest burn rate percentage are scissors, rulers, & trimmers, bookcases, and binders & binders accessories. Because they have the highest burn rate percentage, the promotion of the three products needs to improve. 
+5. The number of customers each year are above 580 customers, with the highest total customers in 2012. There is no significant change in the total number of customers, but in 2012, the total number of customers increased by 13 customers.
+6. The total of new customers is decreasing each year. 
+7. The percentage of retention customers is 77.26%. It means 77.29% of customers in 2009 made transactions again in 2010.
