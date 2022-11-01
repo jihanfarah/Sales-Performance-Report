@@ -144,7 +144,7 @@ ORDER BY sales DESC;
 -- Customers Transactions per Year
 
 SELECT 
-  YEAR(order_date) as years, 
+  YEAR(order_date) AS years, 
   COUNT(DISTINCT customer) AS number_of_customer
 FROM 
   dqlab_sales_store
@@ -165,3 +165,49 @@ ORDER BY years ASC
 +-------+--------------------+
 */
 
+-- New Customers per Year
+
+SELECT 
+	YEAR(first_transaction_date) AS years, 
+	COUNT(DISTINCT customer) AS number_of_new_customer
+FROM (SELECT 
+  customer,
+  MIN(order_date) AS first_transaction_date
+  FROM dqlab_sales_store
+  WHERE order_status="Order Finished"
+  GROUP BY customer) AS first_transaction
+GROUP BY years
+
+-- Output 
+
+/*
++-------+------------------------+
+| years | number_of_new_customer |
++-------+------------------------+
+|  2009 |                    585 |
+|  2010 |                    141 |
+|  2011 |                     38 |
+|  2012 |                     11 |
++-------+------------------------+
+*/
+
+-- Customer Retention in 2009
+
+SELECT
+YEAR(order_date) AS years, 
+ROUND(COUNT(DISTINCT customer)/585*100, 2) AS retention_customer
+FROM dqlab_sales_store
+WHERE order_status="Order Finished" AND YEAR(order_date) = 2009 AND customer IN (SELECT 
+	  DISTINCT customer
+	  FROM dqlab_sales_store
+	  WHERE order_status="Order Finished" AND YEAR(order_date) = 2010)
+GROUP BY years;
+
+-- Output
+/*
++-------+--------------------+
+| years | retention_customer |
++-------+--------------------+
+|  2009 |              77.26 |
++-------+--------------------+
+*/
